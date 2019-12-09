@@ -8,7 +8,11 @@ class City:
         self.y = y
 
     def print_city(self):
-        print(self.city_id + " " + self.x + " " + self.y)
+        print(self.city_id, self.x, self.y)
 
     def distance(self, city):
         return math.sqrt((self.x - city.x)**2 + (self.y - city.y)**2)
+
+    # obrisati posle ili napisati da ipsisuje sve.
+    def __str__(self):
+        return self.city_id
