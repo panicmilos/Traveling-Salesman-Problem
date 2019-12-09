@@ -1,0 +1,2 @@
+https://towardsdatascience.com/evolution-of-a-salesman-a-complete-genetic-algorithm-tutorial-for-python-6fe5d2b3ca35
+u principu ovde je sve sto nam je potrebno haha, mada bilo bi jako lepo kad bismo napravili nesto malo lepse (i bolje)

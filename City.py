@@ -1,8 +1,14 @@
+import math
+
+
 class City:
     def __init__(self, city_id, x, y):
-        self._id = city_id
-        self._x = x
-        self._y = y
+        self.city_id = city_id
+        self.x = x
+        self.y = y
 
     def print_city(self):
-        print(self._id + " " + self._x + " " + self._y)
+        print(self.id + " " + self.x + " " + self.y)
+
+    def distance(self, city):
+        return math.sqrt((self.x - city.x)**2 + (self.y - city.y)**2)
