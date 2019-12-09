@@ -9,7 +9,7 @@ class Options:
 
     def set_value(self, key, value):
         if key not in self.options:
-            print(key, "is not a valid options.")
+            print(key, "is not a valid option.")
             return
 
         self.options[key] = value
@@ -20,7 +20,7 @@ class Options:
 
     def get_item(self, key):
         if key not in self.options:
-            print(key + " is not a valid options.")
+            print(key + " is not a valid option.")
             return
 
         return self.options[key]
