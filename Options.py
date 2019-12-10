@@ -2,9 +2,11 @@ class Options:
 
     def __init__(self):
         self.options = {
-            "NumOfGeneration": 100,
+            "NumOfGenerations": 100,
             "PopulationSize": 50,
             "FunctionTolerance": 10**-8,
+            "Limit": 50,
+            "MutationRate": 0.01
         }
 
     def set_value(self, key, value):
@@ -13,7 +15,7 @@ class Options:
             return
 
         self.options[key] = value
-        print(key, "is successfully set on", value, ".")
+        print(key, "is successfully set to", value, ".")
 
     def __setitem__(self, key, value):
         self.set_value(key, value)

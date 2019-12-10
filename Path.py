@@ -1,8 +1,9 @@
 class Path:
     def __init__(self, cities):
         self.cities = cities
+        self.total_distance = self._calc_total_distance()
 
-    def total_distance(self):
+    def _calc_total_distance(self):
         total = 0
         for i in range(-1, len(self.cities) - 1):
             total += self.cities[i].distance(self.cities[i+1])
@@ -19,3 +20,9 @@ class Path:
         # dodati proveru za opseg
         self.cities[index] = city
 
+    def __str__(self):
+        s = ""
+        for city in self.cities[0:-1]:
+            s = s + city.city_id + " -> "
+        s += self.cities[-1].city_id
+        return s
