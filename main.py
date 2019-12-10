@@ -7,13 +7,12 @@ import GUI
 def main():
     cities = read_file("data_tsp.txt")
     o = Options()
-    o['PopulationSize'] = 100
-    o['NumOfGenerations'] = 1000
-    o['FunctionTolerance'] = 10 ** -15
-    o['Limit'] = 100
-    o['MutationRate'] = 0.01
+    o['PopulationSize'] = 10
+    o['NumOfGenerations'] = 10000
+    o['FunctionTolerance'] = 10 ** -6
+    o['Limit'] = float('Inf')
+    o['MutationRate'] = 0.5
     ga = GeneticAlgorithm(cities, o)
-    ga.calculate_fitness()
     GUI.init(ga)
 
 

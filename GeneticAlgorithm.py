@@ -32,13 +32,13 @@ class GeneticAlgorithm:
             self.fitness_hash[path] = fitness
 
     def next_iter(self):
-        if self.current_iter < self.options['NumOfGenerations'] and self.limit <= self.options['Limit']:
+        if self.current_iter < self.options['NumOfGenerations'] and self.limit < self.options['Limit']:
             self.selection()
             self.population.sort(key=lambda x: self.fitness_hash[x])
             self.population = self.population[0:self.options['PopulationSize']]
             self.current_iter += 1
             # ako nema napretka options['Limit'] puta, prekini petlju
-            if self.current_best - self.population[0].total_distance < self.options['FunctionTolerance']:
+            if abs(self.current_best - self.population[0].total_distance) < self.options['FunctionTolerance']:
                 self.limit += 1
             else:
                 self.limit = 0
