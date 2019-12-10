@@ -8,7 +8,7 @@ def main():
     cities = read_file("data_tsp.txt")
     o = Options()
     o['PopulationSize'] = 100
-    o['NumOfGenerations'] = 100
+    o['NumOfGenerations'] = 1000
     o['FunctionTolerance'] = 10 ** -15
     o['Limit'] = 100
     o['MutationRate'] = 0.01

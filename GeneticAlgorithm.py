@@ -32,7 +32,6 @@ class GeneticAlgorithm:
             self.fitness_hash[path] = fitness
 
     def next_iter(self):
-        self.init_population()
         if self.current_iter < self.options['NumOfGenerations'] and self.limit <= self.options['Limit']:
             self.selection()
             self.population.sort(key=lambda x: self.fitness_hash[x])
@@ -44,6 +43,7 @@ class GeneticAlgorithm:
             else:
                 self.limit = 0
             self.current_best = self.population[0].total_distance
+            self.best_path = self.population[0]
             return True
         return False
 

@@ -44,15 +44,15 @@ def _draw_best_path():
 
 
 # prikaz kako se dolazi do najboljeg(sporo)
-# def _draw_paths():
-#     for path in ga_gui.population:
-#         window.fill((100, 100, 100))
-#         _draw_dots()
-#         _draw_best_path()
-#         for i in range(-1, len(ga_gui.population[1]) - 1):
-#             pygame.draw.line(window, pygame.Color("white"), _scale_coordinates(path[i]),
-#                              _scale_coordinates(path[i + 1]), 1)
-#
+def _draw_paths():
+    for path in ga_gui.population:
+        window.fill((100, 100, 100))
+        _draw_dots()
+        _draw_best_path()
+        for i in range(-1, len(ga_gui.population[1]) - 1):
+            pygame.draw.line(window, pygame.Color("white"), _scale_coordinates(path[i]),
+                             _scale_coordinates(path[i + 1]), 1)
+
 
 def _scale_coordinates(city):
     x = 50 + int(city.x * (display_w - 100) / max_x)
@@ -61,9 +61,10 @@ def _scale_coordinates(city):
 
 
 def _update_window():
-    window.fill((100, 100, 100))
-    _draw_dots()
-    _draw_best_path()
+    # window.fill((100, 100, 100))
+    # _draw_dots()
+    # _draw_best_path()
+    _draw_paths()
     if not ga_gui.next_iter():
         window.fill((130, 130, 90))
         _draw_best_path()
@@ -73,5 +74,4 @@ def _update_window():
             print("Predjeni put >> ", ga_gui.current_best)
             print("Redosled gradova >> ", ga_gui.best_path)
             printed = True
-    # _draw_paths()
     pygame.display.update()

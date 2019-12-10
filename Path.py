@@ -18,6 +18,7 @@ class Path:
 
     def __setitem__(self, index, city):
         # dodati proveru za opseg
+        self._calc_total_distance()
         self.cities[index] = city
 
     def __str__(self):
