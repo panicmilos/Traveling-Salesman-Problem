@@ -1,20 +1,15 @@
 from iomanager import read_file
 from GeneticAlgorithm import GeneticAlgorithm
 from Options import Options
-from time import time
+
 
 def main():
     cities = read_file("data_tsp.txt")
 
-    # for c in cities:
-    #    c.print_city()
     o = Options()
-    o['PopulationSize'] = 1000
-
-    t = time()
+    o['PopulationSize'] = 100
     ga = GeneticAlgorithm(cities, o)
-    print(time() - t)
-    print("TU SAM")
+    ga.ga_loop()
 
 
 def test_options():

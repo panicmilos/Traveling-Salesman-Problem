@@ -1,4 +1,5 @@
 from random import random
+from Path import Path
 
 
 # drugi roditelj i staljva na kraj
@@ -20,8 +21,7 @@ def crossover1(path1, path2):
             new_path2.append(p)
     new_path2 += temp
 
-    print(path1[first_index:last_index])
-    return new_path1, new_path2
+    return Path(new_path1), Path(new_path2)
 
 
 # drugi roditelj i staljva na pocetak
@@ -41,5 +41,4 @@ def crossover2(path1, path2):
         if p not in new_path2:
             new_path2.append(p)
 
-    print(path1[first_index:last_index])
-    return new_path1, new_path2
+    return Path(new_path1), Path(new_path2)
