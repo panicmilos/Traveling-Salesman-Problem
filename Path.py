@@ -13,11 +13,9 @@ class Path:
         return len(self.cities)
 
     def __getitem__(self, index):
-        # dodati proveru za opseg
         return self.cities[index]
 
     def __setitem__(self, index, city):
-        # dodati proveru za opseg
         self.cities[index] = city
         self.total_distance = self._calc_total_distance()
 
@@ -26,4 +24,5 @@ class Path:
         for city in self.cities[0:-1]:
             s = s + city.city_id + " -> "
         s += self.cities[-1].city_id
+
         return s

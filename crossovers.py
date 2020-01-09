@@ -2,10 +2,13 @@ from random import random
 from Path import Path
 
 
-# drugi roditelj i staljva na kraj
-def crossover1(path1, path2):
+def crossover(path1, path2):
     first_index = int(random() * len(path1))
     last_index = int(random() * len(path2))
+
+    while last_index == first_index:
+        last_index = int(random() * len(path2))
+
     if last_index < first_index:
         first_index, last_index = last_index, first_index
 
@@ -20,25 +23,5 @@ def crossover1(path1, path2):
         if p not in temp:
             new_path2.append(p)
     new_path2 += temp
-
-    return Path(new_path1), Path(new_path2)
-
-
-# drugi roditelj i staljva na pocetak
-def crossover2(path1, path2):
-    first_index = int(random() * len(path1))
-    last_index = int(random() * len(path2))
-    if last_index < first_index:
-        first_index, last_index = last_index, first_index
-
-    new_path1 = path1[first_index:last_index]
-    for p in path2:
-        if p not in new_path1:
-            new_path1.append(p)
-
-    new_path2 = path2[first_index:last_index]
-    for p in path1:
-        if p not in new_path2:
-            new_path2.append(p)
 
     return Path(new_path1), Path(new_path2)

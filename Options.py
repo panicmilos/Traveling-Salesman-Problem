@@ -2,10 +2,10 @@ class Options:
 
     def __init__(self):
         self.options = {
-            "NumOfGenerations": 100,
-            "PopulationSize": 50,
-            "FunctionTolerance": 10**-8,
-            "Limit": 50,
+            "NumOfGenerations": 1000,
+            "PopulationSize": 100,
+            "FunctionTolerance": 10**-6,
+            "Limit": 200,
             "MutationRate": 0.01
         }
 

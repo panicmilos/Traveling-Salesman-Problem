@@ -1,8 +1,8 @@
 from copy import copy
 from random import shuffle, random
 from Path import Path
-from crossovers import crossover1
-from mutations import mutation1
+from crossovers import crossover
+from mutations import mutation
 
 
 class GeneticAlgorithm:
@@ -22,6 +22,7 @@ class GeneticAlgorithm:
             cities = copy(self.cities)
             shuffle(cities)
             self.population.append(Path(cities))
+
         self.best_path = self.population[0]
 
     def calculate_fitness(self):
@@ -44,7 +45,9 @@ class GeneticAlgorithm:
                 self.limit = 0
             self.current_best = self.population[0].total_distance
             self.best_path = self.population[0]
+
             return True
+
         return False
 
     def selection(self):
@@ -53,23 +56,19 @@ class GeneticAlgorithm:
         self.calculate_fitness()
         for i in range(len(self.population) // 2):
             parent1, parent2 = self.select_parents()
-            child1, child2 = crossover1(parent1, parent2)
+            child1, child2 = crossover(parent1, parent2)
 
-            mutation1(child1, self.options['MutationRate'])
+            mutation(child1, self.options['MutationRate'])
             childrens.append(child1)
 
-            mutation1(child2, self.options['MutationRate'])
+            mutation(child2, self.options['MutationRate'])
             childrens.append(child2)
 
         self.population += childrens
-        # mozda editovati funkciju da kalkulise samo drugi deo a ne ponovo za roditelje
         self.calculate_fitness()
 
     def select_parents(self):
-        roulette_table = []
-        for path in self.population:
-            fitness_with_random = self.fitness_hash[path] * random()
-            roulette_table.append(fitness_with_random)
+        roulette_table = [self.fitness_hash[path] * random() for path in self.population]
 
         min1 = [0, roulette_table[0]] if roulette_table[0] < roulette_table[1] else [1, roulette_table[1]]
         min2 = [0, roulette_table[0]] if roulette_table[0] > roulette_table[1] else [1, roulette_table[1]]
@@ -85,4 +84,4 @@ class GeneticAlgorithm:
             if fitness < min2[1]:
                 min2 = [i, fitness]
 
-        return self.population[min1[0]], self.population[min1[0]]
+        return self.population[min1[0]], self.population[min2[0]]

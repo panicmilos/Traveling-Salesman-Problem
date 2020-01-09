@@ -8,6 +8,7 @@ printed = False
 window = pygame.display.set_mode((display_w, display_h))
 font = None
 
+
 def init(ga):
     pygame.init()
     pygame.font.init()
@@ -42,7 +43,6 @@ def _draw_dots():
     pygame.draw.circle(window, pygame.Color("purple"), _scale_coordinates(ga_gui.best_path[0]), 7, 1)
 
 
-
 def _draw_best_path():
     for i in range(-1, len(ga_gui.population[1]) - 1):
         pygame.draw.line(window, pygame.Color("red"), _scale_coordinates(ga_gui.best_path[i]),
@@ -62,7 +62,6 @@ def _draw_paths():
     _write_text("Current best: ")
 
 
-
 def _scale_coordinates(city):
     x = 50 + int(city.x * (display_w - 100) / max_x)
     y = 50 + int(city.y * (display_h - 100) / max_y)
@@ -76,7 +75,6 @@ def _write_text(message):
     text2 = font.render(text2, True, (200, 200, 200))
     window.blit(text, (10, 10))
     window.blit(text2, (10, 30))
-
 
 
 def _update_window():
