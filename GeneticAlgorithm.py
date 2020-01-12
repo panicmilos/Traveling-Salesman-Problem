@@ -4,7 +4,6 @@ from Path import Path
 from crossovers import crossover
 from mutations import mutation
 
-
 class GeneticAlgorithm:
     def __init__(self, cities, options):
         self.cities = cities
@@ -25,18 +24,26 @@ class GeneticAlgorithm:
 
         self.best_path = self.population[0]
 
-    def calculate_fitness(self):
-        self.fitness_hash.clear()
+    def calculate_fitness(self, population, clear=1):
+        if clear:
+            self.fitness_hash.clear()
 
-        for path in self.population:
+        for path in population:
             fitness = path.total_distance
             self.fitness_hash[path] = fitness
 
     def next_iter(self):
         if self.current_iter < self.options['NumOfGenerations'] and self.limit < self.options['Limit']:
-            self.selection()
+            childrens = self.selection()
+
             self.population.sort(key=lambda x: self.fitness_hash[x])
-            self.population = self.population[0:self.options['PopulationSize']]
+            childrens.sort(key=lambda x: self.fitness_hash[x])
+
+            num_of_parents = int(self.options['ElitismRate'] * self.options['PopulationSize'] / 100)
+            self.population = [self.population[i] for i in range(num_of_parents)]
+            self.population += [childrens[i] for i in range(self.options['PopulationSize'] - num_of_parents)]
+
+            #self.population = self.population[0:self.options['PopulationSize']]
             self.current_iter += 1
             # ako nema napretka options['Limit'] puta, prekini petlju
             if abs(self.current_best - self.population[0].total_distance) < self.options['FunctionTolerance']:
@@ -53,7 +60,7 @@ class GeneticAlgorithm:
     def selection(self):
         childrens = []
 
-        self.calculate_fitness()
+        self.calculate_fitness(self.population)
         for i in range(len(self.population) // 2):
             parent1, parent2 = self.select_parents()
             child1, child2 = crossover(parent1, parent2)
@@ -64,8 +71,9 @@ class GeneticAlgorithm:
             mutation(child2, self.options['MutationRate'])
             childrens.append(child2)
 
-        self.population += childrens
-        self.calculate_fitness()
+        self.calculate_fitness(childrens, 0)
+
+        return childrens
 
     def select_parents(self):
         roulette_table = [self.fitness_hash[path] * random() for path in self.population]

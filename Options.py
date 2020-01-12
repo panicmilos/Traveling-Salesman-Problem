@@ -2,11 +2,12 @@ class Options:
 
     def __init__(self):
         self.options = {
-            "NumOfGenerations": 1000,
-            "PopulationSize": 100,
+            "NumOfGenerations": 10000,
+            "PopulationSize": 500,
             "FunctionTolerance": 10**-6,
-            "Limit": 200,
-            "MutationRate": 0.01
+            "Limit": 200000000000,
+            "MutationRate": 0.01,
+            "ElitismRate": 50
         }
 
     def set_value(self, key, value):
