@@ -1,5 +1,5 @@
 import pygame
-
+from time import time
 display_w = 1000
 display_h = 800
 max_x = 0
@@ -28,9 +28,11 @@ def init(ga):
     _draw_dots()
     _draw_best_path()
     running = True
+    t = time()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print(time() - t)
                 pygame.quit()
                 quit()
         _update_window()

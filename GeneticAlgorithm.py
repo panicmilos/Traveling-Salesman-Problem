@@ -4,6 +4,7 @@ from Path import Path
 from crossovers import crossover
 from mutations import mutation
 
+
 class GeneticAlgorithm:
     def __init__(self, cities, options):
         self.cities = cities
