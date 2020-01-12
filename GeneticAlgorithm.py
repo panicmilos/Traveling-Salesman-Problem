@@ -43,7 +43,6 @@ class GeneticAlgorithm:
             self.population = [self.population[i] for i in range(num_of_parents)]
             self.population += [childrens[i] for i in range(self.options['PopulationSize'] - num_of_parents)]
 
-            #self.population = self.population[0:self.options['PopulationSize']]
             self.current_iter += 1
             # ako nema napretka options['Limit'] puta, prekini petlju
             if abs(self.current_best - self.population[0].total_distance) < self.options['FunctionTolerance']:
