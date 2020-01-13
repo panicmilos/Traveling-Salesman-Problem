@@ -6,8 +6,8 @@ class Options:
             "PopulationSize": 100,
             "FunctionTolerance": 10**-6,
             "Limit": 200,
-            "MutationRateStart": 0.01,
-            "MutationRateFinish": 0.01,
+            "MutationRateStart": 1,
+            "MutationRateFinish": 5,
             "ElitismRate": 20,
             "Draw": False,
         }
