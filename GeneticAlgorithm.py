@@ -3,6 +3,8 @@ from random import shuffle, random
 from Path import Path
 from crossovers import crossover
 from mutations import mutation
+import GUI
+from time import time
 
 
 class GeneticAlgorithm:
@@ -15,9 +17,11 @@ class GeneticAlgorithm:
         self.limit = 0
         self.current_best = float('Inf')
         self.best_path = None
-        self.init_population()
+        self._init_population()
+        self.status_index = 1
 
-    def init_population(self):
+    def _init_population(self):
+        self.population.clear()
         for i in range(self.options['PopulationSize']):
             cities = copy(self.cities)
             shuffle(cities)
@@ -25,7 +29,7 @@ class GeneticAlgorithm:
 
         self.best_path = self.population[0]
 
-    def calculate_fitness(self, population, clear=1):
+    def _calculate_fitness(self, population, clear=1):
         if clear:
             self.fitness_hash.clear()
 
@@ -34,15 +38,18 @@ class GeneticAlgorithm:
             self.fitness_hash[path] = fitness
 
     def next_iter(self):
+        if self.current_iter >= self.options['NumOfGenerations'] * self.status_index / 10:
+            print(">> " + str(self.status_index * 10) + "%")
+            self.status_index += 1
         if self.current_iter < self.options['NumOfGenerations'] and self.limit < self.options['Limit']:
-            childrens = self.selection()
+            children = self._selection()
 
             self.population.sort(key=lambda x: self.fitness_hash[x])
-            childrens.sort(key=lambda x: self.fitness_hash[x])
+            children.sort(key=lambda x: self.fitness_hash[x])
 
             num_of_parents = int(self.options['ElitismRate'] * self.options['PopulationSize'] / 100)
             self.population = [self.population[i] for i in range(num_of_parents)]
-            self.population += [childrens[i] for i in range(self.options['PopulationSize'] - num_of_parents)]
+            self.population += [children[i] for i in range(self.options['PopulationSize'] - num_of_parents)]
 
             self.current_iter += 1
             # ako nema napretka options['Limit'] puta, prekini petlju
@@ -54,29 +61,41 @@ class GeneticAlgorithm:
             self.best_path = self.population[0]
 
             return True
-
+        else:
+            if self.limit >= self.options['Limit']:
+                print("Limit dostignut. Algoritam prekinut\n")
         return False
 
-    def selection(self):
-        childrens = []
+    def _selection(self):
+        children = []
 
-        self.calculate_fitness(self.population)
+        self._calculate_fitness(self.population)
+        # promenljiva mutacija
+        mr = (self.options["MutationRateStart"] + self.current_iter / self.options["NumOfGenerations"] * (
+                self.options["MutationRateFinish"] - self.options["MutationRateStart"])) / 100
+
         for i in range(len(self.population) // 2):
-            parent1, parent2 = self.select_parents()
+            parent1, parent2 = self._select_parents()
             child1, child2 = crossover(parent1, parent2)
 
-            mutation(child1, self.options['MutationRate'])
-            childrens.append(child1)
+            mutation(child1, mr)
+            children.append(child1)
 
-            mutation(child2, self.options['MutationRate'])
-            childrens.append(child2)
+            mutation(child2, mr)
+            children.append(child2)
 
-        self.calculate_fitness(childrens, 0)
+        self._calculate_fitness(children, 0)
 
-        return childrens
+        return children
 
-    def select_parents(self):
-        roulette_table = [self.fitness_hash[path] * random() for path in self.population]
+    def _select_parents(self):
+        sortirane_putanje = sorted(self.fitness_hash.items(), key=lambda kv: kv[1])
+
+        sp = 1.8  # selective pressure, skaliranje indeksa 1<=sp<=2
+
+        n = len(self.population)
+
+        roulette_table = [(2 - sp + (2 * (sp - 1) * i / (n - 1))) * random() for i in range(n)]
 
         min1 = [0, roulette_table[0]] if roulette_table[0] < roulette_table[1] else [1, roulette_table[1]]
         min2 = [0, roulette_table[0]] if roulette_table[0] > roulette_table[1] else [1, roulette_table[1]]
@@ -92,4 +111,16 @@ class GeneticAlgorithm:
             if fitness < min2[1]:
                 min2 = [i, fitness]
 
-        return self.population[min1[0]], self.population[min2[0]]
+        return sortirane_putanje[min1[0]][0], sortirane_putanje[min2[0]][0]
+
+    def run(self):
+        print("Running...")
+        t = time()
+        if self.options['Draw']:
+            GUI.init(self)
+        else:
+            while self.next_iter():
+                pass
+            print("Predjeni put >> ", self.current_best)
+            print("Redosled gradova >> ", self.best_path)
+            print("Ukupno vreme", time() - t)

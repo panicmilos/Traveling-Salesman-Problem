@@ -6,24 +6,26 @@ class Options:
             "PopulationSize": 100,
             "FunctionTolerance": 10**-6,
             "Limit": 200,
-            "MutationRate": 0.01,
-            "ElitismRate": 20
+            "MutationRateStart": 0.01,
+            "MutationRateFinish": 0.01,
+            "ElitismRate": 20,
+            "Draw": False,
         }
 
     def set_value(self, key, value):
         if key not in self.options:
-            print(key, "is not a valid option.")
+            print(key, "nije validna opcija.")
             return
 
         self.options[key] = value
-        print(key, "is successfully set to", value, ".")
+        print(key, "je postavljen na", value, ".")
 
     def __setitem__(self, key, value):
         self.set_value(key, value)
 
     def get_item(self, key):
         if key not in self.options:
-            print(key + " is not a valid option.")
+            print(key, "nije validna opcija.")
             return
 
         return self.options[key]

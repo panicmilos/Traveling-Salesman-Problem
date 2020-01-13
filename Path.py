@@ -22,7 +22,6 @@ class Path:
     def __str__(self):
         s = ""
         for city in self.cities[0:-1]:
-            s = s + city.city_id + " -> "
-        s += self.cities[-1].city_id
-
+            s = s + str(city.city_id) + " -> "
+        s += str(self.cities[-1].city_id)
         return s

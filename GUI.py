@@ -1,15 +1,20 @@
 import pygame
 from time import time
+
 display_w = 1000
 display_h = 800
 max_x = 0
 max_y = 0
-printed = False
-window = pygame.display.set_mode((display_w, display_h))
+window = None
 font = None
+t = 0
+printed = False
+update = True
 
 
 def init(ga):
+    global window
+    window = pygame.display.set_mode((display_w, display_h))
     pygame.init()
     pygame.font.init()
     pygame.display.set_caption("TSP - genetic algorithm")
@@ -28,14 +33,15 @@ def init(ga):
     _draw_dots()
     _draw_best_path()
     running = True
+    global t
     t = time()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print(time() - t)
                 pygame.quit()
                 quit()
-        _update_window()
+        if update:
+            _update_window()
 
 
 def _draw_dots():
@@ -51,17 +57,19 @@ def _draw_best_path():
                          _scale_coordinates(ga_gui.best_path[i + 1]), 3)
 
 
-# prikaz kako se dolazi do najboljeg(sporo)
-def _draw_paths():
-    for path in ga_gui.population:
-        window.fill((100, 100, 100))
-        _draw_dots()
-        _draw_best_path()
-        for i in range(-1, len(ga_gui.population[1]) - 1):
-            pygame.draw.line(window, pygame.Color("white"), _scale_coordinates(path[i]),
-                             _scale_coordinates(path[i + 1]), 1)
-
-    _write_text("Current best: ")
+# # prikaz kako se dolazi do najboljeg(sporo)
+# def _draw_paths():
+#     for path in ga_gui.population:
+#         window.fill((100, 100, 100))
+#         _draw_dots()
+#         _draw_best_path()
+#         for i in range(-1, len(ga_gui.population[1]) - 1):
+#             pygame.draw.line(window, pygame.Color("white"), _scale_coordinates(path[i]),
+#                              _scale_coordinates(path[i + 1]), 1)
+#         pygame.time.wait(2)
+#         pygame.display.update()
+#
+#     _write_text("Current best: ")
 
 
 def _scale_coordinates(city):
@@ -75,23 +83,28 @@ def _write_text(message):
     text2 = "Iteration: " + str(ga_gui.current_iter)
     text = font.render(text, True, (200, 200, 200))
     text2 = font.render(text2, True, (200, 200, 200))
+    global window
     window.blit(text, (10, 10))
     window.blit(text2, (10, 30))
 
 
 def _update_window():
-    # window.fill((100, 100, 100))
-    # _draw_dots()
-    # _draw_best_path()
-    _draw_paths()
+    global window
+    window.fill((100, 100, 100))
+    _draw_dots()
+    _draw_best_path()
+    _write_text("Current best: ")
     if not ga_gui.next_iter():
         window.fill((130, 130, 90))
         _draw_best_path()
         _draw_dots()
         _write_text("Best: ")
         global printed
+        global update
         if not printed:
             print("Predjeni put >> ", ga_gui.current_best)
             print("Redosled gradova >> ", ga_gui.best_path)
+            print("Ukupno vreme", time() - t)
+            update = False
             printed = True
     pygame.display.update()
