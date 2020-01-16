@@ -4,7 +4,7 @@ class Options:
         self.options = {
             "NumOfGenerations": 1000,
             "PopulationSize": 100,
-            "FunctionTolerance": 10**-6,
+            "Tolerance": 10**-6,
             "Limit": 200,
             "MutationRateStart": 1,
             "MutationRateFinish": 5,

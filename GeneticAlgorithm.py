@@ -53,7 +53,7 @@ class GeneticAlgorithm:
 
             self.current_iter += 1
             # ako nema napretka options['Limit'] puta, prekini petlju
-            if abs(self.current_best - self.population[0].total_distance) < self.options['FunctionTolerance']:
+            if abs(self.current_best - self.population[0].total_distance) < self.options['Tolerance']:
                 self.limit += 1
             else:
                 self.limit = 0
@@ -89,29 +89,29 @@ class GeneticAlgorithm:
         return children
 
     def _select_parents(self):
-        sortirane_putanje = sorted(self.fitness_hash.items(), key=lambda kv: kv[1])
+        sortirane_putanje = sorted(self.fitness_hash.items(), key=lambda kv: kv[1], reverse=True)
 
-        sp = 1.8  # selective pressure, skaliranje indeksa 1<=sp<=2
+        sp = 1.8  # skaliranje indeksa 1<=sp<=2
 
-        n = len(self.population)
+        n = self.options["PopulationSize"]
 
         roulette_table = [(2 - sp + (2 * (sp - 1) * i / (n - 1))) * random() for i in range(n)]
 
-        min1 = [0, roulette_table[0]] if roulette_table[0] < roulette_table[1] else [1, roulette_table[1]]
-        min2 = [0, roulette_table[0]] if roulette_table[0] > roulette_table[1] else [1, roulette_table[1]]
+        max1 = [0, roulette_table[0]] if roulette_table[0] < roulette_table[1] else [1, roulette_table[1]]
+        max2 = [0, roulette_table[0]] if roulette_table[0] > roulette_table[1] else [1, roulette_table[1]]
 
         for i in range(2, len(self.population)):
             fitness = roulette_table[i]
 
-            if fitness < min1[1]:
-                min2 = min1
-                min1 = [i, fitness]
+            if fitness > max1[1]:
+                max2 = max1
+                max1 = [i, fitness]
                 continue
 
-            if fitness < min2[1]:
-                min2 = [i, fitness]
+            if fitness > max2[1]:
+                max2 = [i, fitness]
 
-        return sortirane_putanje[min1[0]][0], sortirane_putanje[min2[0]][0]
+        return sortirane_putanje[max1[0]][0], sortirane_putanje[max2[0]][0]
 
     def run(self):
         print("Running...")
